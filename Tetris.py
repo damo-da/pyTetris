@@ -1,6 +1,8 @@
 """The game of tetris"""
 from header import * 
 
+os_supports_music=False
+
 
     
 class Cell(object):
@@ -73,19 +75,27 @@ class Music(object):
     __musicFiles={"music":"music.mid","sound":{}}
     
     def __init__(self):
-        pygame.mixer.music.load(Music.__musicFiles['music'])
+        if(os_supports_music): 
+            Music.__enabled=True
+        else:
+            Music.__enabled=False
+
+        if Music.__enabled: pygame.mixer.music.load(Music.__musicFiles['music'])
+
         for kw in Music.__sources:
             source= Music.__sources[kw]
             
-            Music.__musicFiles['sound'][kw]=pygame.mixer.Sound(source)
+            if Music.__enabled:
+                Music.__musicFiles['sound'][kw]=pygame.mixer.Sound(source)
             
     def ready(self):
         return True
 
     def play(self):
-        pygame.mixer.music.play()
+        if Music.__enabled: pygame.mixer.music.play()
 
     def playSound(self,sType='lineComplete'):
+        if not Music.__enabled: return;
         try:
             Music.__musicFiles['sound'][sType].play()
         except:
