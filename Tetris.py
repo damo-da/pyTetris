@@ -1,3 +1,5 @@
+#!/usr/bin/env python2
+
 """The game of tetris"""
 from header import * 
 
